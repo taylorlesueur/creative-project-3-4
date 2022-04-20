@@ -23,11 +23,9 @@ export default {
   },
     methods: {
         removeCard(card) {
-            console.log("Completing card...");
             card.completed = true;
         },
         followLink(card) {
-            console.log("Following link...");
             window.open(card.url, '_blank');
         },
     },

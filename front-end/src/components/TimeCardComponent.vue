@@ -36,12 +36,10 @@ export default {
   },
   methods: {
     clockIn(card) {
-        console.log("Clocking In: ", card.name);
         card.clockedin = true;
         this.clockInDatabase(card);
     },
     async clockInDatabase(card) {
-      console.log("Database clockin");
       try {
         const curTimestamp = Date.now();
         await axios.post('/api/clockin', {
@@ -50,11 +48,10 @@ export default {
           timestampIn: curTimestamp
         });
       } catch (error) {
-        console.log(error);
+        return false;
       }
     },
     async clockOutDatabase(punch) {
-      console.log("Database clockout: ", punch.timestampIn);
       try {
         const curTimestamp = Date.now();
         await axios.put("/api/punches/" + punch.timestampIn, {
@@ -63,26 +60,21 @@ export default {
         this.getItems();
         return true;
       } catch (error) {
-        console.log(error);
         return false;
       }
     },
     clockOut(card) {
-        console.log("Clocking out: ", card.name);
         card.clockedin = false;
         const titleArray = this.punches.filter(punch => punch.name == card.name);
         const punch = titleArray[titleArray.length -1];
-        console.log("punch name: ", punch);
         this.clockOutDatabase(punch);
     },
     async getPunches() {
       try {
         let response = await axios.get("/api/punches");
         this.punches = response.data;
-        console.log(this.punches);
         return true;
       } catch (error) {
-        console.log(error);
         return false;
       }
     },
